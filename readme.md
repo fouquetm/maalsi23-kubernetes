@@ -12,5 +12,9 @@ dont forget to expose 5672 port on localhost
 - rabbitmq username
 - rabbitmq password
 
-3. run both with visual studio or command line
-4. add product & read the console output
+3. migrate database
+update database connection strings in appsettings.json file in api folder and run :
+dotnet ef database update
+
+4. run both with visual studio or command line
+5. add product & read the console output
