@@ -1,0 +1,50 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: lab_rabbitmq
+    ports:
+      - 15672:15672 #web
+      - 5672:5672 #service
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    healthcheck:
+      test: exit 0
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-CU14-ubuntu-20.04
+    container_name: lab_mssql
+    ports:
+      - 1433:1433 #sql
+    volumes:
+      - D:\repositories\kubernetes\mssql_data:/var/opt/mssql/data/
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=P@ssw0rd2023!
+  api:
+    build: ./RabbitMqProductAPI
+    container_name: lab_api
+    ports:
+      - 4443:443  #https
+      - 8081:80   #http
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=tcp:mssql,1433;Initial Catalog=RabbitMqDemo;Persist Security Info=False;User ID=sa;Password=P@ssw0rd2023!;Connection Timeout=30;
+      - RabbitMQ__Hostname=rabbitmq
+      - RabbitMQ__Username=admin
+      - RabbitMQ__Password=admin
+    depends_on:
+      - rabbitmq
+      - mssql
+  console:
+    build: ./RabbitMQProduct.ConsoleApplication
+    container_name: lab_console
+    environment:
+      - RabbitMQ__Hostname=rabbitmq
+      - RabbitMQ__Username=admin
+      - RabbitMQ__Password=admin
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
