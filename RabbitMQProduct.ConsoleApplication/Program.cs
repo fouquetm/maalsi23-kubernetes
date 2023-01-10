@@ -5,6 +5,7 @@ using System.Text;
 
 var configuration = new ConfigurationBuilder()
      .AddJsonFile($"appsettings.json")
+     .AddEnvironmentVariables()
      .Build();
 
 //Here we specify the Rabbit MQ Server. we use rabbitmq docker image and use it
@@ -37,4 +38,5 @@ consumer.Received += (model, eventArgs) =>
 //read the message
 channel.BasicConsume(queue: "product", autoAck: true, consumer: consumer);
 
-Console.ReadKey();
+//avoid docker container to close
+await Task.Run(() => Thread.Sleep(Timeout.Infinite));
