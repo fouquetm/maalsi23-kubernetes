@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RabbitMqProductAPI.Models;
-using RabbitMqProductAPI.RabbitMQ;
 using RabbitMqProductAPI.Services;
 
 namespace RabbitMqProductAPI.Controllers
@@ -10,12 +9,10 @@ namespace RabbitMqProductAPI.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService productService;
-        private readonly IRabbitMQProducer _rabbitMQProducer;
 
-        public ProductController(IProductService _productService, IRabbitMQProducer rabbitMQProducer)
+        public ProductController(IProductService _productService)
         {
             productService = _productService;
-            _rabbitMQProducer = rabbitMQProducer;
         }
 
         [HttpGet("productlist")]
@@ -34,12 +31,7 @@ namespace RabbitMqProductAPI.Controllers
         [HttpPost("addproduct")]
         public Product AddProduct(Product product)
         {
-            var productData = productService.AddProduct(product);
-
-            //send the inserted product data to the queue and consumer will listening this data from queue
-            _rabbitMQProducer.SendProductMessage(productData);
-
-            return productData;
+            return productService.AddProduct(product);
         }
 
         [HttpPut("updateproduct")]

@@ -1,4 +1,6 @@
-﻿namespace RabbitMqProductAPI.RabbitMQ
+﻿using RabbitMQ.Client;
+
+namespace RabbitMqProductAPI.RabbitMQ
 {
     public interface IRabbitMQProducer
     {
