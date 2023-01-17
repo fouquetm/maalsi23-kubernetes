@@ -6,8 +6,8 @@ services:
     ports:
       - 15672:15672 #web
     volumes:
-      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+      - D:\repositories\kubernetes\rabbitmq_data\data:/var/lib/rabbitmq
+      - D:\repositories\kubernetes\rabbitmq_data\log:/var/log/rabbitmq
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=admin
@@ -25,7 +25,7 @@ services:
       - MSSQL_SA_PASSWORD=P@ssw0rd2023!
   api:
     build: ./RabbitMqProductAPI
-    scale: 3
+    # scale: 3
     expose:
       - 80
     environment:
@@ -43,7 +43,7 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - api    
+      - api
   console:
     build: ./RabbitMQProduct.ConsoleApplication
     container_name: lab_console
@@ -51,6 +51,6 @@ services:
       - RabbitMQ__Hostname=rabbitmq
       - RabbitMQ__Username=admin
       - RabbitMQ__Password=admin
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
+    # depends_on:
+    #   rabbitmq:
+    #     condition: service_healthy
