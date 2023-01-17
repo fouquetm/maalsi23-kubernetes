@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: mssql
+  name: mssql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mssql
+  template:
+    metadata:
+      labels:
+        io.kompose.service: mssql
+    spec:
+      containers:
+        - env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: MSSQL_SA_PASSWORD
+              value: P@ssw0rd2023!
+          image: mcr.microsoft.com/mssql/server:2019-CU14-ubuntu-20.04
+          name: lab-mssql
+          ports:
+            - containerPort: 1433
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/opt/mssql/data/
+              name: mssql-claim0
+      restartPolicy: Always
+      volumes:
+        - name: mssql-claim0
+          hostPath:
+            path: /run/desktop/mnt/host/d/repositories/kubernetes/mssql_data
+            type: DirectoryOrCreate
