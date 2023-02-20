@@ -20,7 +20,7 @@ services:
     ports:
       - 1433:1433 #sql
     volumes:
-      - D:\repositories\kubernetes\mssql_data:/var/opt/mssql/data/
+      - D:\repositories\kubernetes\mssql_maalsi_data:/var/opt/mssql/data/
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=P@ssw0rd2023!
