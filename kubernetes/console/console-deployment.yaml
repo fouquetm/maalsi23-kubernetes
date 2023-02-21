@@ -23,7 +23,7 @@ spec:
               value: admin
             - name: RabbitMQ__Username
               value: admin
-          image: sqlimfouquet/pubsub-console
+          image: matthieuf/pubsub-console:1.0
           name: lab-console
           resources: {}
       restartPolicy: Always

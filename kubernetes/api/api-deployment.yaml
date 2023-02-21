@@ -25,7 +25,7 @@ spec:
               value: admin
             - name: RabbitMQ__Username
               value: admin
-          image: sqlimfouquet/pubsub-api
+          image: matthieuf/pubsub-api:1.0
           name: api
           ports:
             - containerPort: 80
