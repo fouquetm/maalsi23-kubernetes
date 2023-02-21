@@ -1,8 +1,8 @@
+using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
 using RabbitMqProductAPI.Data;
 using RabbitMqProductAPI.RabbitMQ;
 using RabbitMqProductAPI.Services;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +45,7 @@ using (var scope = app.Services.CreateScope())
         .GetRequiredService<DbContextClass>();
 
     // Here is the migration executed
-    dbContext.Database.EnsureCreated();
+    dbContext.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline.
