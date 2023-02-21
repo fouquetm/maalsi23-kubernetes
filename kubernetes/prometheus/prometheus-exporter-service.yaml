@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-exporter
+spec:
+  selector:
+    app: prometheus-exporter
+  ports:
+    - name: web
+      port: 9100
+      targetPort: 9100
+  type: ClusterIP

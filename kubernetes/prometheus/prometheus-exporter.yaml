@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: prometheus-exporter
+spec:
+  selector:
+    matchLabels:
+      app: prometheus-exporter
+  template:
+    metadata:
+      labels:
+        app: prometheus-exporter
+    spec:
+      containers:
+        - name: prometheus-exporter
+          image: quay.io/prometheus/node-exporter:latest
+          ports:
+            - containerPort: 9100
+          args:
+            - --path.procfs=/host/proc
+            - --path.sysfs=/host/sys
+            - --collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($|/)"
+            - --web.listen-address=:9100
+          volumeMounts:
+            - name: proc
+              mountPath: /host/proc
+              readOnly: true
+            - name: sys
+              mountPath: /host/sys
+              readOnly: true
+      hostNetwork: true
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+      volumes:
+        - name: proc
+          hostPath:
+            path: /run/desktop/mnt/host/d/repositories/kubernetes/prometheus_data/proc
+            type: DirectoryOrCreate
+        - name: sys
+          hostPath:
+            path: /run/desktop/mnt/host/d/repositories/kubernetes/prometheus_data/sys
+            type: DirectoryOrCreate
