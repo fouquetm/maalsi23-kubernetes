@@ -5,9 +5,6 @@ services:
     container_name: lab_rabbitmq
     ports:
       - 15672:15672 #web
-    volumes:
-      - D:\repositories\kubernetes\rabbitmq_data\data:/var/lib/rabbitmq
-      - D:\repositories\kubernetes\rabbitmq_data\log:/var/log/rabbitmq
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=admin
