@@ -18,7 +18,7 @@ spec:
       containers:
         - env:
             - name: ConnectionStrings__DefaultConnection
-              value: Server=tcp:mssql,1433;Initial Catalog=RabbitMqDemo;Persist Security Info=False;User ID=sa;Password=P@ssw0rd2023!;Connection Timeout=30;
+              value: Server=tcp:mssql,1433;Initial Catalog=RabbitMqDemo;Persist Security Info=False;User ID=sa;Password=MyC0m9l&xP@ssw0rd;Connection Timeout=30;
             - name: RabbitMQ__Hostname
               value: rabbitmq
             - name: RabbitMQ__Password
