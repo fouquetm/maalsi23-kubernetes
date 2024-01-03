@@ -20,7 +20,10 @@ spec:
             - name: ConnectionStrings__DefaultConnection
               value: Server=tcp:mssql,1433;Initial Catalog=RabbitMqDemo;Persist Security Info=False;User ID=sa;Password=MyC0m9l&xP@ssw0rd;Connection Timeout=30;
             - name: RabbitMQ__Hostname
-              value: rabbitmq
+              valueFrom:
+                configMapKeyRef:
+                  name: api
+                  key: rabbitmq_hostname
             - name: RabbitMQ__Password
               value: admin
             - name: RabbitMQ__Username

@@ -18,7 +18,10 @@ spec:
       containers:
         - env:
             - name: RabbitMQ__Hostname
-              value: rabbitmq
+              valueFrom:
+                configMapKeyRef:
+                  name: console
+                  key: rabbitmq_hostname
             - name: RabbitMQ__Password
               value: admin
             - name: RabbitMQ__Username
