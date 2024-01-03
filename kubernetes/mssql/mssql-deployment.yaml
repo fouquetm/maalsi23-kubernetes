@@ -1,3 +1,17 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mssql-data
+  annotations:
+    volume.beta.kubernetes.io/storage-class: azure-disk
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,23 +28,29 @@ spec:
       labels:
         io.kompose.service: mssql
     spec:
+      securityContext:
+        fsGroup: 10001
       containers:
         - env:
+            - name: MSSQL_PID
+              value: "Developer"
             - name: ACCEPT_EULA
               value: "Y"
             - name: MSSQL_SA_PASSWORD
-              value: P@ssw0rd2023!
-          image: mcr.microsoft.com/mssql/server:2019-CU14-ubuntu-20.04
+              valueFrom:
+                secretKeyRef:
+                  name: mssql
+                  key: MSSQL_SA_PASSWORD
+          image: mcr.microsoft.com/mssql/server:2022-latest
           name: lab-mssql
           ports:
             - containerPort: 1433
           resources: {}
           volumeMounts:
-            - mountPath: /var/opt/mssql/data/
-              name: mssql-claim0
+            - mountPath: /var/opt/mssql
+              name: mssqldb
       restartPolicy: Always
       volumes:
-        - name: mssql-claim0
-          hostPath:
-            path: /run/desktop/mnt/host/d/repositories/kubernetes/mssql_maalsi_data
-            type: DirectoryOrCreate
+      - name: mssqldb
+        persistentVolumeClaim:
+          claimName: mssql-data
