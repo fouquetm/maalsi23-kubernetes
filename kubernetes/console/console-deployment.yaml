@@ -23,11 +23,28 @@ spec:
                   name: console
                   key: rabbitmq_hostname
             - name: RabbitMQ__Password
-              value: admin
+              valueFrom:
+                secretKeyRef:
+                  key: rabbit-password
+                  name: rabbit-password
             - name: RabbitMQ__Username
-              value: admin
+              valueFrom:
+                secretKeyRef:
+                  key: rabbit-username
+                  name: rabbit-username
           image: matthieuf/pubsub-console:1.0
           name: lab-console
           resources: {}
+          volumeMounts:
+            - name: secret-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
       restartPolicy: Always
+      volumes:
+        - name: secret-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "kv-mfolabs"
 status: {}
