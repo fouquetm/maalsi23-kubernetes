@@ -42,18 +42,18 @@ spec:
             - name: MSSQL_SA_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mssql
-                  key: MSSQL_SA_PASSWORD
+                  name: mssql-password
+                  key: mssql-password
           image: mcr.microsoft.com/mssql/server:2022-latest
           name: lab-mssql
           ports:
             - containerPort: 1433
           resources: {}
           volumeMounts:
-            - mountPath: /var/opt/mssql
-              name: mssqldb
+            - name: mssqldb
+              mountPath: /var/opt/mssql
       restartPolicy: Always
       volumes:
-      - name: mssqldb
-        persistentVolumeClaim:
-          claimName: mssql-data
+        - name: mssqldb
+          persistentVolumeClaim:
+            claimName: mssql-data
