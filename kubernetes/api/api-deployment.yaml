@@ -17,8 +17,13 @@ spec:
     spec:
       containers:
         - env:
+            - name: MSSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mssql-password
+                  key: mssql-password
             - name: ConnectionStrings__DefaultConnection
-              value: Server=tcp:mssql,1433;Initial Catalog=RabbitMqDemo;Persist Security Info=False;User ID=sa;Password=MyC0m9l&xP@ssw0rd;Connection Timeout=30;
+              value: "Server=tcp:mssql,1433;Initial Catalog=RabbitMqDemo;Persist Security Info=False;User ID=sa;Password=$(MSSQL_PASSWORD);Connection Timeout=30;"
             - name: RabbitMQ__Hostname
               valueFrom:
                 configMapKeyRef:
@@ -37,4 +42,15 @@ spec:
               cpu: 500m
             requests:
               cpu: 200m
+          volumeMounts:
+            - name: secret-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+      volumes:
+        - name: secret-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "kv-mfolabs"
       restartPolicy: Always
