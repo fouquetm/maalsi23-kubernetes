@@ -5,3 +5,12 @@ metadata:
 spec:
   rules:
   - host: "app0.mfolabs.me"
+    http:
+      paths:
+      - path: /api/Product/productlist
+        pathType: Prefix
+        backend:
+          service:
+            name: api
+            port:
+              number: 80

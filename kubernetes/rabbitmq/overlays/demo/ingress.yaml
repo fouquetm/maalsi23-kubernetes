@@ -5,3 +5,12 @@ metadata:
 spec:
   rules:
   - host: "app0.mfolabs.me"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rabbitmq
+            port:
+              number: 15672

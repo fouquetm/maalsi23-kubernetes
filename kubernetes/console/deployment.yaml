@@ -35,4 +35,14 @@ spec:
           image: matthieuf/pubsub-console:1.0
           name: lab-console
           resources: {}
-status: {}
+          volumeMounts:
+            - name: secrets-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+      volumes:
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "kv-mfolabs"

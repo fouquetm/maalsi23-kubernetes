@@ -52,8 +52,17 @@ spec:
           volumeMounts:
             - name: mssqldb
               mountPath: /var/opt/mssql
+            - name: secrets-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
       restartPolicy: Always
       volumes:
         - name: mssqldb
           persistentVolumeClaim:
             claimName: mssql-data
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "kv-mfolabs"
