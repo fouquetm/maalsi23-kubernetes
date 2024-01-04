@@ -43,9 +43,15 @@ spec:
       containers:
         - env:
             - name: RABBITMQ_DEFAULT_PASS
-              value: admin
+              valueFrom:
+                secretKeyRef:
+                  key: rabbit-password
+                  name: rabbit-password
             - name: RABBITMQ_DEFAULT_USER
-              value: admin
+              valueFrom:
+                secretKeyRef:
+                  key: rabbit-username
+                  name: rabbit-username
           image: rabbitmq:3.8.25-management-alpine
           name: lab-rabbitmq
           ports:
@@ -57,6 +63,9 @@ spec:
               name: rabbitmq-claim0
             - mountPath: /var/log/rabbitmq
               name: rabbitmq-claim1
+            - name: secret-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
       restartPolicy: Always
       volumes:
         - name: rabbitmq-claim0
@@ -65,3 +74,9 @@ spec:
         - name: rabbitmq-claim1
           persistentVolumeClaim:
             claimName: rabbitmq-data1
+        - name: secret-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "kv-mfolabs"
