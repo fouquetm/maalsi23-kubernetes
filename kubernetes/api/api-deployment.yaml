@@ -48,15 +48,4 @@ spec:
               cpu: 500m
             requests:
               cpu: 200m
-          volumeMounts:
-            - name: secret-store
-              mountPath: "/mnt/secrets-store"
-              readOnly: true
-      volumes:
-        - name: secret-store
-          csi:
-            driver: secrets-store.csi.k8s.io
-            readOnly: true
-            volumeAttributes:
-              secretProviderClass: "kv-mfolabs"
       restartPolicy: Always
