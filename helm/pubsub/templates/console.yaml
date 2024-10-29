@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: console
+data:
+  rabbitmq_hostname: "rabbitmq"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: console
+  name: console
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: console
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: console
+    spec:
+      initContainers:
+        - name: wait-for-rabbitmq
+          image: busybox
+          command: ['sh', '-c', 'until nc -z rabbitmq 5672; do echo Waiting for RabbitMQ; sleep 2; done;']
+      containers:
+        - env:
+            - name: RabbitMQ__Hostname
+              valueFrom:
+                configMapKeyRef:
+                  name: console
+                  key: rabbitmq_hostname
+            - name: RabbitMQ__Password
+              valueFrom:
+                secretKeyRef:
+                  key: rabbit-password
+                  name: rabbit-password
+            - name: RabbitMQ__Username
+              valueFrom:
+                secretKeyRef:
+                  key: rabbit-username
+                  name: rabbit-username
+          image: matthieuf/pubsub-console:1.0
+          name: lab-console
+          resources: {}
+          volumeMounts:
+            - name: secrets-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+      volumes:
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "kv-mfolabs"

@@ -1,0 +1,41 @@
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: kv-mfolabs # needs to be unique per namespace
+  annotations:
+    "helm.sh/hook": pre-install
+spec:
+  provider: azure
+  parameters:
+    userAssignedIdentityID: 2977be69-0d95-418c-935b-69c3085616c4 # Setting this to use workload identity
+    keyvaultName: kv-aptar-aks-form # Set to the name of your key vault
+    tenantId: 1e2f522c-2662-4a18-938a-8b61a1ab92d1 # The tenant ID of the key vault
+    usePodIdentity: "false"
+    useVMManagedIdentity: "true"          # Set to true for using managed identity
+    objects: |
+      array:
+        - |
+          objectName: RabbitMQUsername             # Set to the name of your secret
+          objectType: secret              # object types: secret, key, or cert
+        - |
+          objectName: RabbitMQPassword             # Set to the name of your secret
+          objectType: secret              # object types: secret, key, or cert
+        - |
+          objectName: MSSQL-SA-PASSWORD             # Set to the name of your secret
+          objectType: secret              # object types: secret, key, or cert
+  secretObjects:
+    - secretName: mssql-password
+      type: Opaque
+      data:
+        - objectName: MSSQL-SA-PASSWORD # name of the mounted content to sync. this could be the object name or object alias
+          key: mssql-password
+    - secretName: rabbit-password
+      type: Opaque
+      data:
+        - objectName: RabbitMQPassword # name of the mounted content to sync. this could be the object name or object alias
+          key: rabbit-password
+    - secretName: rabbit-username 
+      type: Opaque
+      data:
+        - objectName: RabbitMQUsername  # name of the mounted content to sync. this could be the object name or object alias
+          key: rabbit-username

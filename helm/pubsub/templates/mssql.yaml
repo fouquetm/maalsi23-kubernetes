@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mssql
+data:
+  mssql_pid: "Developer"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mssql-data
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: mssql
+  name: mssql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mssql
+  template:
+    metadata:
+      labels:
+        io.kompose.service: mssql
+    spec:
+      securityContext:
+        fsGroup: 10001
+      containers:
+        - env:
+            - name: MSSQL_PID
+              valueFrom:
+                configMapKeyRef:
+                  key: mssql_pid
+                  name: mssql
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: MSSQL_SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mssql-password
+                  key: mssql-password
+          image: mcr.microsoft.com/mssql/server:2022-latest
+          name: lab-mssql
+          ports:
+            - containerPort: 1433
+          resources: {}
+          volumeMounts:
+            - name: mssqldb
+              mountPath: /var/opt/mssql
+            - name: secrets-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: mssqldb
+          persistentVolumeClaim:
+            claimName: mssql-data
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "kv-mfolabs"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: mssql
+  name: mssql
+spec:
+  ports:
+    - name: "1433"
+      port: 1433
+      targetPort: 1433
+  selector:
+    io.kompose.service: mssql
+status:
+  loadBalancer: {}
