@@ -1,9 +1,10 @@
-rabbitmq:
+global:
+  hostname: tobereplaced
 
 mssql:
-
-api:
-
-console:
+  mssql_pid: Developer
 
 keyvault:
+  userAssignedIdentityID: tobereplaced
+  keyvaultName: tobereplaced
+  tenantId: tobereplaced

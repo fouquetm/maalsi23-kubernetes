@@ -95,7 +95,7 @@ metadata:
 spec:
   ingressClassName: azure-application-gateway
   rules:
-  - host: "app0.mfolabs.me"
+  - host: "{{ .Values.global.hostname }}"
     http:
       paths:
       - path: /api/Product/productlist

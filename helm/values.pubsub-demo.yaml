@@ -1,0 +1,10 @@
+global:
+  hostname: app0.mfolabs.me
+
+mssql:
+  mssql_pid: Developer
+
+keyvault:
+  userAssignedIdentityID: 2977be69-0d95-418c-935b-69c3085616c4
+  keyvaultName: kv-aptar-aks-form
+  tenantId: 1e2f522c-2662-4a18-938a-8b61a1ab92d1

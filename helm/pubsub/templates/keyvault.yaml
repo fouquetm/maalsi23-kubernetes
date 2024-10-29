@@ -7,9 +7,9 @@ metadata:
 spec:
   provider: azure
   parameters:
-    userAssignedIdentityID: 2977be69-0d95-418c-935b-69c3085616c4 # Setting this to use workload identity
-    keyvaultName: kv-aptar-aks-form # Set to the name of your key vault
-    tenantId: 1e2f522c-2662-4a18-938a-8b61a1ab92d1 # The tenant ID of the key vault
+    userAssignedIdentityID: {{ .Values.keyvault.userAssignedIdentityID }} # Setting this to use workload identity ClientID
+    keyvaultName: {{ .Values.keyvault.keyvaultName }} # Set to the name of your key vault
+    tenantId: {{ .Values.keyvault.tenantId }} # The tenant ID of the key vault
     usePodIdentity: "false"
     useVMManagedIdentity: "true"          # Set to true for using managed identity
     objects: |

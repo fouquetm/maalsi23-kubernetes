@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: mssql
 data:
-  mssql_pid: "Developer"
+  mssql_pid: "{{ .Values.mssql.mssql_pid }}"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
