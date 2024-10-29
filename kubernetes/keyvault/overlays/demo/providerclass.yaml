@@ -4,6 +4,6 @@ metadata:
   name: kv-mfolabs # needs to be unique per namespace
 spec:
   parameters:
-    userAssignedIdentityID: 7d8b3a79-186f-48d4-84b4-e86fd92ef963 # Setting this to use workload identity
-    keyvaultName: kv-mfo-maalsi-23 # Set to the name of your key vault
+    userAssignedIdentityID: 2977be69-0d95-418c-935b-69c3085616c4 # Setting this to use workload identity ClientID
+    keyvaultName: kv-aptar-aks-form # Set to the name of your key vault
     tenantId: 1e2f522c-2662-4a18-938a-8b61a1ab92d1 # The tenant ID of the key vault
