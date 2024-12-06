@@ -5,7 +5,7 @@ metadata:
 spec:
   ingressClassName: azure-application-gateway
   rules:
-  - host: "app0.mfolabs.me"
+  - host: "appmfo.mfolabs.me"
     http:
       paths:
       - path: /

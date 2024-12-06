@@ -4,7 +4,7 @@ metadata:
   name: rabbitmq
 spec:
   rules:
-  - host: "app0.mfolabs.me"
+  - host: "mfo-micsi241.aks.mfolabs.me"
     http:
       paths:
       - path: /
