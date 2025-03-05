@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - ../../base
 
-namespace: mfolabs-demo
+namespace: ak

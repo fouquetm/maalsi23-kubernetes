@@ -7,4 +7,4 @@ resources:
 patches:
   - path: api-ingress.yaml
 
-namespace: mfolabs-demo
+namespace: ak

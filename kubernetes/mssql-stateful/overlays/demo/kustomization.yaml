@@ -5,4 +5,4 @@ resources:
   - ../../base
   - mssql-configmap.yaml
 
-namespace: mfolabs-demo
+namespace: ak
