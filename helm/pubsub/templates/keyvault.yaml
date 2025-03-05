@@ -7,22 +7,22 @@ metadata:
 spec:
   provider: azure
   parameters:
-    userAssignedIdentityID: {{ .Values.keyvault.userAssignedIdentityID }} # Setting this to use workload identity ClientID
-    keyvaultName: {{ .Values.keyvault.keyvaultName }} # Set to the name of your key vault
-    tenantId: {{ .Values.keyvault.tenantId }} # The tenant ID of the key vault
+    userAssignedIdentityID: { { .Values.keyvault.userAssignedIdentityID } } # Setting this to use workload identity ClientID
+    keyvaultName: { { .Values.keyvault.keyvaultName } } # Set to the name of your key vault
+    tenantId: { { .Values.keyvault.tenantId } } # The tenant ID of the key vault
     usePodIdentity: "false"
-    useVMManagedIdentity: "true"          # Set to true for using managed identity
+    useVMManagedIdentity: "true" # Set to true for using managed identity
     objects: |
       array:
         - |
-          objectName: RabbitMQUsername             # Set to the name of your secret
-          objectType: secret              # object types: secret, key, or cert
+          objectName: RabbitMQUsername
+          objectType: secret
         - |
-          objectName: RabbitMQPassword             # Set to the name of your secret
-          objectType: secret              # object types: secret, key, or cert
+          objectName: RabbitMQPassword
+          objectType: secret
         - |
-          objectName: MSSQL-SA-PASSWORD             # Set to the name of your secret
-          objectType: secret              # object types: secret, key, or cert
+          objectName: MSSQL-SA-PASSWORD
+          objectType: secret
   secretObjects:
     - secretName: mssql-password
       type: Opaque
@@ -34,8 +34,8 @@ spec:
       data:
         - objectName: RabbitMQPassword # name of the mounted content to sync. this could be the object name or object alias
           key: rabbit-password
-    - secretName: rabbit-username 
+    - secretName: rabbit-username
       type: Opaque
       data:
-        - objectName: RabbitMQUsername  # name of the mounted content to sync. this could be the object name or object alias
+        - objectName: RabbitMQUsername # name of the mounted content to sync. this could be the object name or object alias
           key: rabbit-username
