@@ -58,6 +58,26 @@ jobs:
         working-directory: ${{env.PROJECT_FOLDER}}
         run: dotnet test --configuration Release
 
+  snyk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{env.DOTNET_VERSION}}
+
+      - name: Restore dependencies
+        working-directory: ${{env.PROJECT_FOLDER}}
+        run: dotnet restore
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/dotnet@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
   sonar:
     runs-on: ubuntu-latest
 
